@@ -1,4 +1,4 @@
-FROM bitnami/nginx:1.21-debian-10
+FROM nginx:latest
 
 LABEL maintainer="imfanshilin@gmail.com"
 
