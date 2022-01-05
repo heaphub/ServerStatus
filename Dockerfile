@@ -6,7 +6,7 @@ RUN apt update -y \
     && apt upgrade -y \
     && apt install -y gcc g++ make
 
-COPY . . \
+ADD . . \
     server /ServerStatus/server/ \
     web /usr/share/nginx/html/
 
