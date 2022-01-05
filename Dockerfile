@@ -12,7 +12,7 @@ RUN apt update -y \
     && mkdir -p /ServerStatus/server/ \
     && mv /opt/server/* /ServerStatus/server/ \
     && mv /opt/web/* /usr/share/nginx/html/ \
-    && rm -f /opt/*
+    && rm -rf /opt/*
 
 EXPOSE 80 35601
 
