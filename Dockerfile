@@ -2,14 +2,17 @@ FROM nginx:latest
 
 LABEL maintainer="imfanshilin@gmail.com"
 
+COPY . /opt
+
 RUN apt update -y \
     && apt upgrade -y \
-    && apt install -y gcc g++ make
-
-ADD server /ServerStatus/server/ \
-    web /usr/share/nginx/html/
-
-RUN make -j$(nproc)
+    && apt install -y gcc g++ make \
+    && cd /opt/server \
+    && make -j$(nproc) \
+    && mkdir -p /ServerStatus/server/ \
+    && mv /opt/server/* /ServerStatus/server/ \
+    && mv /opt/web/* /usr/share/nginx/html/ \
+    && rm -f /opt/*
 
 EXPOSE 80 35601
 
