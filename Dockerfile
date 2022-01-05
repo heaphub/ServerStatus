@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM bitnami/nginx:1.21-debian-10
 
 LABEL maintainer="imfanshilin@gmail.com"
 
@@ -6,13 +6,10 @@ RUN apt update -y \
     && apt upgrade -y \
     && apt install -y gcc g++ make
 
-ADD . . \
-    server /ServerStatus/server/ \
+COPY server /ServerStatus/server/ \
     web /usr/share/nginx/html/
 
-RUN make -j$(nproc) \
-    && pwd \
-    && ls -a
+RUN make -j$(nproc)
 
 EXPOSE 80 35601
 
