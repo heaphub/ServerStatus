@@ -1,25 +1,25 @@
 # The Dockerfile for build localhost source, not git repo
-FROM debian:buster as builder
+FROM bitnami/nginx:1.21-debian-10
 
-MAINTAINER cppla https://cpp.la
+LABEL maintainer="imfanshilin@gmail.com"
 
-RUN apt-get update -y && apt-get -y install gcc g++ make
+RUN apt update -y \
+    && apt upgrade -y \
+    && apt install -y gcc g++ make
 
 COPY . .
 
-WORKDIR /server
+RUN make -j$(nproc) \
+    && pwd \
+    && ls -a \
+    && mkdir -p /ServerStatus/server/
 
-RUN make
-RUN pwd && ls -a
+COPY server /ServerStatus/server/
 
-# glibc env run
-FROM nginx:latest
-
-RUN mkdir -p /ServerStatus/server/
-
-COPY --from=builder server /ServerStatus/server/
-COPY --from=builder web /usr/share/nginx/html/
+COPY web /usr/share/nginx/html/
 
 EXPOSE 80 35601
+
+WORKDIR /server
 
 CMD nohup sh -c '/etc/init.d/nginx start && /ServerStatus/server/sergate --config=/ServerStatus/server/config.json --web-dir=/usr/share/nginx/html'
